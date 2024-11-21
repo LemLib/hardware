@@ -1,6 +1,7 @@
 #pragma once
 
 #include "hardware/Encoder/Encoder.hpp"
+#include "hardware/Port.hpp"
 #include "pros/rotation.hpp"
 
 namespace lemlib {
@@ -36,7 +37,7 @@ class V5RotationSensor : public Encoder {
          * }
          * @endcode
          */
-        V5RotationSensor(std::int8_t port);
+        V5RotationSensor(ReversibleSmartPort port);
         /**
          * @brief Construct a new V5 Rotation Sensor
          *
@@ -51,7 +52,7 @@ class V5RotationSensor : public Encoder {
          * }
          * @endcode
          */
-        V5RotationSensor(std::uint8_t port, bool reversed);
+        V5RotationSensor(SmartPort port, bool reversed);
         /**
          * @brief whether the V5 Rotation Sensor is connected
          *

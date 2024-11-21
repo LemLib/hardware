@@ -1,10 +1,11 @@
 #include "hardware/Imu/V5InertialSensor.hpp"
+#include "hardware/Port.hpp"
 
 namespace lemlib {
 V5InertialSensor::V5InertialSensor(pros::Imu imu)
     : m_imu(imu) {}
 
-V5InertialSensor::V5InertialSensor(std::uint8_t port)
+V5InertialSensor::V5InertialSensor(SmartPort port)
     : m_imu(port) {}
 
 int V5InertialSensor::calibrate() { return m_imu.reset(); }

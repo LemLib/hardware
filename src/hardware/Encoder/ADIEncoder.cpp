@@ -1,4 +1,5 @@
 #include "hardware/Encoder/ADIEncoder.hpp"
+#include "hardware/Port.hpp"
 #include <cmath>
 #include <limits.h>
 
@@ -6,10 +7,10 @@ namespace lemlib {
 ADIEncoder::ADIEncoder(pros::adi::Encoder encoder)
     : m_encoder(encoder) {}
 
-ADIEncoder::ADIEncoder(std::uint8_t topPort, std::uint8_t bottomPort, bool reversed)
+ADIEncoder::ADIEncoder(ADIPort topPort, ADIPort bottomPort, bool reversed)
     : m_encoder(pros::adi::Encoder(topPort, bottomPort, reversed)) {}
 
-ADIEncoder::ADIEncoder(std::uint8_t expanderPort, std::uint8_t topPort, std::uint8_t bottomPort, bool reversed)
+ADIEncoder::ADIEncoder(SmartPort expanderPort, ADIPort topPort, ADIPort bottomPort, bool reversed)
     : m_encoder({expanderPort, topPort, bottomPort}, reversed) {}
 
 int ADIEncoder::isConnected() {

@@ -2,6 +2,7 @@
 
 #include "pros/motors.hpp"
 #include "hardware/encoder/Encoder.hpp"
+#include "hardware/Port.hpp"
 #include "units/Temperature.hpp"
 
 namespace lemlib {
@@ -25,7 +26,7 @@ class Motor : public Encoder {
          * }
          * @endcode
          */
-        Motor(int port, AngularVelocity outputVelocity);
+        Motor(ReversibleSmartPort port, AngularVelocity outputVelocity);
         /**
          * @brief Construct a new Motor object
          *
@@ -42,7 +43,7 @@ class Motor : public Encoder {
          * }
          * @endcode
          */
-        Motor(uint8_t port, bool reversed, AngularVelocity outputVelocity);
+        Motor(SmartPort port, bool reversed, AngularVelocity outputVelocity);
         /**
          * @brief Construct a new Motor object
          * 

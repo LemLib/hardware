@@ -1,5 +1,6 @@
 #include "pros/motor_group.hpp"
 #include "hardware/Motor/Motor.hpp"
+#include "hardware/Port.hpp"
 #include <vector>
 
 namespace lemlib {
@@ -33,7 +34,7 @@ class MotorGroup : Encoder {
          * }
          * @endcode
          */
-        MotorGroup(std::initializer_list<int> ports, AngularVelocity outputVelocity);
+        MotorGroup(std::initializer_list<ReversibleSmartPort> ports, AngularVelocity outputVelocity);
         /**
          * @brief Construct a new Motor Group
          *

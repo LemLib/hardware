@@ -1,6 +1,7 @@
 #pragma once
 
 #include "hardware/Imu/Imu.hpp"
+#include "hardware/Port.hpp"
 #include "pros/imu.hpp"
 
 namespace lemlib {
@@ -33,7 +34,7 @@ class V5InertialSensor : public Imu {
          * }
          * @endcode
          */
-        V5InertialSensor(std::uint8_t port);
+        V5InertialSensor(SmartPort port);
         /**
          * @brief calibrate the V5 Inertial Sensor
          *

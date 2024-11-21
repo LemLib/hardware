@@ -1,4 +1,5 @@
 #include "hardware/Motor/MotorGroup.hpp"
+#include "hardware/Port.hpp"
 #include "Motor.hpp"
 #include "units/Angle.hpp"
 #include "units/Temperature.hpp"
@@ -7,7 +8,7 @@
 #include <errno.h>
 
 namespace lemlib {
-MotorGroup::MotorGroup(std::initializer_list<int> ports, AngularVelocity outputVelocity)
+MotorGroup::MotorGroup(std::initializer_list<ReversibleSmartPort> ports, AngularVelocity outputVelocity)
     : m_outputVelocity(outputVelocity) {
     for (const int port : ports) { m_motors.push_back({.port = port, .connectedLastCycle = true, .offset = 0_stDeg}); }
 }
