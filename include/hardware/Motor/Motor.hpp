@@ -496,6 +496,8 @@ class Motor : public Encoder {
          */
         int setOutputVelocity(AngularVelocity outputVelocity);
     private:
+        Current motorToBatt(Current current) const;
+        Current battToMotor(Current current) const;
         AngularVelocity m_outputVelocity;
         Angle m_offset = 0_stDeg;
         int m_port;
