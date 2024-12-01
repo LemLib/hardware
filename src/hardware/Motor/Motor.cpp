@@ -5,6 +5,7 @@
 #include "pros/motors.h"
 #include "units/Temperature.hpp"
 #include "units/units.hpp"
+#include <cmath>
 #include <cstdint>
 
 namespace lemlib {
@@ -191,7 +192,11 @@ Current Motor::getCurrentLimit() const {
                 else power += 5.5_watt;
             }
         }
-    if (power <= 88_watt) return thisLimit;
+    //default behaviour if <= 88 watt
+    if (power <= 88_watt) {
+        //round thisLimit to 2dp
+        return from_amp(std::round(to_amp(thisLimit)*100)/100);
+    }
         
     //limit based on number of motors
     Current defaultLimit = battToMotor(maxCurrent/ports.size());
@@ -215,8 +220,12 @@ Current Motor::getCurrentLimit() const {
     if (defaultLimit > maxLimit) defaultLimit = maxLimit;
 
     //check if set limit should apply
-    if(thisLimit > defaultLimit) return defaultLimit;
-    return thisLimit;
+    if(thisLimit > defaultLimit){
+        //round defaultLimit to 2dp
+        return from_amp(std::round(to_amp(defaultLimit)*100)/100);
+    }
+    //round thisLimit to 2dp
+    return from_amp(std::round(to_amp(thisLimit)*100)/100);
 }
 
 int Motor::setCurrentLimit(Current limit) { return pros::c::motor_set_current_limit(m_port, to_amp(limit) * 1000); }
