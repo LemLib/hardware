@@ -1,0 +1,72 @@
+[
+  {
+    "metadata": {
+      "location": "https://github.com/LemLib/hardware/releases/download/v0.4.0/hardware%400.4.0.zip"
+    },
+    "name": "hardware",
+    "py/object": "pros.conductor.templates.base_template.BaseTemplate",
+    "supported_kernels": "^4.1.1",
+    "target": "v5",
+    "version": "0.4.0"
+  },
+  {
+    "metadata": {
+      "location": "https://github.com/LemLib/hardware/releases/download/v0.3.1/hardware%400.3.1.zip"
+    },
+    "name": "hardware",
+    "py/object": "pros.conductor.templates.base_template.BaseTemplate",
+    "supported_kernels": "^4.1.1",
+    "target": "v5",
+    "version": "0.3.1"
+  },
+  {
+    "metadata": {
+      "location": "https://github.com/LemLib/hardware/releases/download/v0.3.0/hardware%400.3.0.zip"
+    },
+    "name": "hardware",
+    "py/object": "pros.conductor.templates.base_template.BaseTemplate",
+    "supported_kernels": "^4.1.1",
+    "target": "v5",
+    "version": "0.3.0"
+  },
+  {
+    "metadata": {
+      "location": "https://github.com/LemLib/hardware/releases/download/v0.2.2/hardware%400.2.2.zip"
+    },
+    "name": "hardware",
+    "py/object": "pros.conductor.templates.base_template.BaseTemplate",
+    "supported_kernels": "^4.1.1",
+    "target": "v5",
+    "version": "0.2.2"
+  },
+  {
+    "metadata": {
+      "location": "https://github.com/LemLib/hardware/releases/download/v0.2.1/hardware%400.2.1.zip"
+    },
+    "name": "hardware",
+    "py/object": "pros.conductor.templates.base_template.BaseTemplate",
+    "supported_kernels": "^4.1.1",
+    "target": "v5",
+    "version": "0.2.1"
+  },
+  {
+    "metadata": {
+      "location": "https://github.com/LemLib/hardware/releases/download/v0.2.0/hardware%400.2.0.zip"
+    },
+    "name": "hardware",
+    "py/object": "pros.conductor.templates.base_template.BaseTemplate",
+    "supported_kernels": "^4.1.1",
+    "target": "v5",
+    "version": "0.2.0"
+  },
+  {
+    "metadata": {
+      "location": "https://github.com/LemLib/hardware/releases/download/v0.1.0/hardware%400.1.0.zip"
+    },
+    "name": "hardware",
+    "py/object": "pros.conductor.templates.base_template.BaseTemplate",
+    "supported_kernels": "^4.1.0",
+    "target": "v5",
+    "version": "0.1.0"
+  }
+]
