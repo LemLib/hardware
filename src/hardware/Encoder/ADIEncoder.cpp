@@ -7,11 +7,11 @@ namespace lemlib {
 ADIEncoder::ADIEncoder(pros::adi::Encoder encoder)
     : m_encoder(encoder) {}
 
-ADIEncoder::ADIEncoder(ADIPort topPort, ADIPort bottomPort, bool reversed)
-    : m_encoder(pros::adi::Encoder(topPort, bottomPort, reversed)) {}
+ADIEncoder::ADIEncoder(ADIPair ports, bool reversed)
+    : m_encoder(pros::adi::Encoder(ports.first(), ports.second(), reversed)) {}
 
-ADIEncoder::ADIEncoder(SmartPort expanderPort, ADIPort topPort, ADIPort bottomPort, bool reversed)
-    : m_encoder({expanderPort, topPort, bottomPort}, reversed) {}
+ADIEncoder::ADIEncoder(SmartPort expanderPort, ADIPair ports, bool reversed)
+    : m_encoder({expanderPort, ports.first(), ports.second()}, reversed) {}
 
 int ADIEncoder::isConnected() {
     // it's not possible to check if the ADIEncoder is connected, so we just return 1 to indicate that it is

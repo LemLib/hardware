@@ -27,25 +27,23 @@ class ADIEncoder : public Encoder {
         /**
          * @brief Construct a new Optical Shaft Encoder
          *
-         * @param topPort the top port of the optical shaft encoder (1-8, 'a'-'h', or 'A'-'H')
-         * @param bottomPort the bottom port of the optical shaft encoder (1-8, 'a'-'h', or 'A'-'H')
+         * @param ports the two ports for the optical shaft encoder (1-8, 'a'-'h', 'A'-'H')
          * @param reversed whether the encoder is reversed or not
          *
          * @b Example:
          * @code {.cpp}
          * void initialize() {
          *     // optical shaft encoder on ports 'a' and 'b', which is reversed
-         *     lemlib::ADIEncoder encoder('a', 'b', true);
+         *     lemlib::ADIEncoder encoder({'a', 'b'}, true);
          * }
          * @endcode
          */
-        ADIEncoder(ADIPort topPort, ADIPort bottomPort, bool reversed);
+        ADIEncoder(ADIPair ports, bool reversed);
         /**
          * @brief Construct a new Optical Shaft Encoder
          *
          * @param expanderPort the port of the ADI Expander
-         * @param topPort the top port of the optical shaft encoder (1-8, 'a'-'h', or 'A'-'H')
-         * @param bottomPort the bottom port of the optical shaft encoder (1-8, 'a'-'h', or 'A'-'H')
+         * @param ports the two ports for the optical shaft encoder (1-8, 'a'-'h', 'A'-'H')
          * @param reversed whether the encoder is reversed or not
          *
          * @b Example:
@@ -54,11 +52,11 @@ class ADIEncoder : public Encoder {
          *     // optical shaft encoder on an ADI Expander
          *     // ADIExpander port: 2, top port: 'c', bottom port: 'd'
          *     // encoder is not reversed
-         *     lemlib::ADIEncoder(2, 'c', 'd'. false);
+         *     lemlib::ADIEncoder(2, {'c', 'd'}, false);
          * }
          * @endcode
          */
-        ADIEncoder(SmartPort expanderPort, ADIPort topPort, ADIPort bottomPort, bool reversed);
+        ADIEncoder(SmartPort expanderPort, ADIPair ports, bool reversed);
         /**
          * @brief whether the encoder is connected
          *
