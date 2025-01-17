@@ -6,6 +6,7 @@
 #include "pros/motors.h"
 #include "units/Temperature.hpp"
 #include "units/units.hpp"
+#include <cmath>
 #include <cstdint>
 
 namespace lemlib {
@@ -155,10 +156,69 @@ int Motor::setReversed(bool reversed) {
 
 ReversibleSmartPort Motor::getPort() const { return m_port; }
 
+NEW_METRIC_PREFIXES(Current, amp) //temporary until added to units
+
+Current Motor::motorToBatt(Current current) const {
+    return from_amp(exp(current.convert(amp) + 4.324) / 0.925); 
+}
+
+Current Motor::battToMotor(Current current) const {
+    return from_amp(0.925 * log(current.convert(amp)) - 4.324);
+}
+
 Current Motor::getCurrentLimit() const {
-    const Current result = from_amp(pros::c::motor_get_current_limit(m_port));
-    if (result.internal() == INT32_MAX) return from_amp(INFINITY); // error checking
-    return result;
+    const Current maxCurrent = 12.8_amp;
+    const Current maxLimit = 2.5_amp;
+
+    const Current thisLimit = from_mamp(pros::c::motor_get_current_limit(m_port));
+    if (thisLimit.internal() == INT32_MAX) return from_amp(INFINITY); // error checking
+
+    //gets the ports of all the motors
+    std::vector<int> ports;
+    Power power = 0_watt;
+        for (int i = 0; i < 20; i++) {
+            Motor m(i,200_rpm);
+            if (!m.isConnected()) continue;
+            else {
+                ports.push_back(i);
+                if(m.getType()==MotorType::V5) power += 11_watt;
+                else power += 5.5_watt;
+            }
+        }
+    //default behaviour if <= 88 watt
+    if (power <= 88_watt) {
+        //round thisLimit to 2dp
+        return from_amp(std::round(to_amp(thisLimit)*100)/100);
+    }
+        
+    //limit based on number of motors
+    Current defaultLimit = battToMotor(maxCurrent/ports.size());
+    if (defaultLimit > maxLimit) defaultLimit = maxLimit;
+    
+    //sum the limited motors
+    Current totalLimit = 0_amp;
+    int numLimited = 0;
+    for (int i = 0; i < ports.size(); i++) {
+        const Current limit = from_mamp(pros::c::motor_get_current_limit(ports[i]));
+        if (limit.internal() == INT32_MAX) return from_amp(INFINITY); // error checking
+
+        if (limit < defaultLimit){
+            totalLimit += motorToBatt(limit);
+            numLimited++;
+        }
+    }
+    //adjust limit based on set limits
+    const Current battCurrentPerMotor = (maxCurrent - totalLimit)/(ports.size()-numLimited);
+    defaultLimit = battToMotor(battCurrentPerMotor);
+    if (defaultLimit > maxLimit) defaultLimit = maxLimit;
+
+    //check if set limit should apply
+    if(thisLimit > defaultLimit){
+        //round defaultLimit to 2dp
+        return from_amp(std::round(to_amp(defaultLimit)*100)/100);
+    }
+    //round thisLimit to 2dp
+    return from_amp(std::round(to_amp(thisLimit)*100)/100);
 }
 
 int Motor::setCurrentLimit(Current limit) { return pros::c::motor_set_current_limit(m_port, to_amp(limit) * 1000); }
