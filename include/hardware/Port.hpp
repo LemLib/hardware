@@ -60,8 +60,7 @@ class SmartPort {
 
         constexpr SmartPort(std::int64_t port, DynamicPort)
             : m_port(port) {
-            if (port < 1 || port > 21)
-                throw InvalidPortException(std::format("port {} is not a valid smart port", port));
+            if (port < 1 || port > 21) throw InvalidPortException("Port not in range of 1-21");
         }
 
         constexpr operator std::uint8_t() const { return m_port; }
@@ -76,7 +75,7 @@ class ReversibleSmartPort {
             if (port < 0) port = -port;
             if (port < 1 || port > 21) {
 #if defined(_DEBUG) || defined(__clang__)
-                detail::_<"Port out of range!">();
+                detail::_<"Port not in range of 1-21">();
 #else
                 throw std::out_of_range("Port not in range of 1-21");
 #endif
@@ -89,8 +88,7 @@ class ReversibleSmartPort {
         constexpr ReversibleSmartPort(std::int64_t port, DynamicPort)
             : m_port(port) {
             if (port < 0) port = -port;
-            if (port < 1 || port > 21)
-                throw InvalidPortException(std::format("port {} is not a valid smart port", port));
+            if (port < 1 || port > 21) throw InvalidPortException("Port not in range of 1-21");
         }
 
         constexpr ReversibleSmartPort operator-() const { return ReversibleSmartPort {-m_port, runtime_check_port}; }
