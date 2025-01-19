@@ -2,6 +2,9 @@
 
 #include <cstdint>
 #include <algorithm>
+#include <cstring>
+#include <exception>
+#include <format>
 
 namespace lemlib {
 
@@ -32,6 +35,16 @@ struct DynamicPort {};
 
 constexpr DynamicPort runtime_check_port {};
 
+class InvalidSmartPortException : public std::exception {
+    public:
+        explicit InvalidSmartPortException(int port)
+            : m_message(std::format("Smart Port with value {} is not a value between 1 to 21", port)) {}
+
+        const char* what() const noexcept override { return m_message.c_str(); }
+    private:
+        const std::string m_message;
+};
+
 class SmartPort {
     public:
         consteval SmartPort(std::int64_t port)
@@ -41,7 +54,7 @@ class SmartPort {
 
         constexpr SmartPort(std::int64_t port, DynamicPort)
             : m_port(port) {
-            if (port < 1 || port > 21) m_port = 0;
+            if (port < 1 || port > 21) throw InvalidSmartPortException(m_port);
         }
 
         constexpr operator std::uint8_t() const { return m_port; }
@@ -63,7 +76,7 @@ class ReversibleSmartPort {
         constexpr ReversibleSmartPort(std::int64_t port, DynamicPort)
             : m_port(port) {
             if (port < 0) port = -port;
-            if (port < 1 || port > 21) m_port = 0;
+            if (port < 1 || port > 21) throw InvalidSmartPortException(port);
         }
 
         constexpr ReversibleSmartPort operator-() const { return ReversibleSmartPort {-m_port, runtime_check_port}; }
