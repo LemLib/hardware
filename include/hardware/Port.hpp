@@ -4,7 +4,6 @@
 #include <algorithm>
 #include <cstring>
 #include <exception>
-#include <format>
 
 namespace lemlib {
 
@@ -37,12 +36,12 @@ constexpr DynamicPort runtime_check_port {};
 
 class InvalidPortException : public std::exception {
     public:
-        explicit InvalidPortException(std::string s)
+        explicit InvalidPortException(const char* s)
             : m_message(s) {}
 
-        const char* what() const noexcept override { return m_message.c_str(); }
+        const char* what() const noexcept override { return m_message; }
     private:
-        const std::string m_message;
+        const char* m_message;
 };
 
 class SmartPort {
