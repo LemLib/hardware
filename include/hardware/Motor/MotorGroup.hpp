@@ -348,6 +348,62 @@ class MotorGroup : public Encoder {
          */
         std::vector<Temperature> getTemperatures() const;
         /**
+         * @brief Get the currents of the motors in the motor group
+         *
+         * This function uses the following values of errno when an error state is reached:
+         *
+         * ENODEV: the port cannot be configured as a motor
+         *
+         * @return vector<Temperature> vector of the temperatures of the motors
+         * @return INFINITY on failure, setting errno
+         *
+         * @b Example:
+         * @code {.cpp}
+         * void initialize() {
+         *     lemlib::MotorGroup motorGroup({1, -2, 3}, 360_rpm);
+         *
+         *     // output motor currents to the console
+         *     std::vector<Current> currents = motorGroup.getCurrents();
+         *     for (units::Current c : currents) {
+         *         if (to_amp(c) == INFINITY) {
+         *             std::cout << "Error getting motor current" << std::endl;
+         *         } else {
+         *             std::cout << "Motor Current: " << to_amp(c) << " amps" << std::endl;
+         *         }
+         *     }
+         * }
+         * @endcode
+         */
+        std::vector<Current> getCurrents() const;
+        /**
+         * @brief Get the cartridges of the motors in the motor group
+         *
+         * This function uses the following values of errno when an error state is reached:
+         *
+         * ENODEV: the port cannot be configured as a motor
+         *
+         * @return vector<AngularVelocity> vector of the RPMs of the motors catridges
+         * @return INFINITY on failure, setting errno
+         *
+         * @b Example:
+         * @code {.cpp}
+         * void initialize() {
+         *     lemlib::MotorGroup motorGroup({1, -2, 3}, 360_rpm);
+         *
+         *     // output motor currents to the console
+         *     std::vector<AngularVelocity> cartridges = motorGroup.getMotorCartridges();
+         *     for (AngularVelocity c : cartridges) {
+         *         if (to_rpm(c) == INFINITY) {
+         *             std::cout << "Error getting motor cartridge" << std::endl;
+         *         } else {
+         *             std::cout << "Motor Cartridge: " << to_rpm(c) << " rpm" << std::endl;
+         *         }
+         *     }
+         * }
+         * @endcode
+         */
+        std::vector<AngularVelocity> getMotorCartridges() const;
+        /**
          * @brief set the output velocity of the motors
          *
          * @param outputVelocity the theoretical maximum output velocity of the motor group, after gearing, to set
@@ -378,6 +434,21 @@ class MotorGroup : public Encoder {
          * @endcode
          */
         AngularVelocity getOutputVelocity() const;
+        /**
+         * @brief Get the actual velocity of the motor group
+         *
+         * @return AngularVelocity the actual velocity of the motor group
+         *
+         * @b Example:
+         * @code {.cpp}
+         * void initialize() {
+         *     lemlib::MotorGroup motorGroup({1, -2, 3}, 360_rpm);
+         *     motorGroup.move(0.5);
+         *     std::cout << "output velocity: " << motorGroup.getActualVelocity() << std::endl; // outputs 180 rpm
+         * }
+         * @endcode
+         */
+        AngularVelocity getActualVelocity() const;
         /**
          * @brief Get the number of connected motors in the group
          *
@@ -506,6 +577,14 @@ class MotorGroup : public Encoder {
          * @endcode
          */
         void removeMotor(Motor motor);
+        /**
+         * @brief Get motors in the motor group as a vector of lemlib::Motor objects
+         *
+         * This function exists to simplify logic in the MotorGroup source code.
+         *
+         * @return const std::vector<Motor> vector of lemlib::Motor objects
+         */
+        const std::vector<Motor> getMotors() const;
     private:
         struct MotorInfo {
                 ReversibleSmartPort port;
@@ -531,14 +610,6 @@ class MotorGroup : public Encoder {
          * @return INT_MAX on failure, setting errno
          */
         Angle configureMotor(ReversibleSmartPort port) const;
-        /**
-         * @brief Get motors in the motor group as a vector of lemlib::Motor objects
-         *
-         * This function exists to simplify logic in the MotorGroup source code.
-         *
-         * @return const std::vector<Motor> vector of lemlib::Motor objects
-         */
-        const std::vector<Motor> getMotors() const;
         /**
          * @brief Get the Motor Infos
          *

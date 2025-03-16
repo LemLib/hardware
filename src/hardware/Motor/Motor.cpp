@@ -3,6 +3,7 @@
 #include "hardware/util.hpp"
 #include "units/Angle.hpp"
 #include "pros/device.h"
+#include "pros/error.h"
 #include "pros/motors.h"
 #include "units/Temperature.hpp"
 #include "units/units.hpp"
@@ -201,6 +202,12 @@ Temperature Motor::getTemperature() const {
     return result;
 }
 
+Current Motor::getCurrent() const {
+    const Current result = from_amp(pros::c::motor_get_current_draw(m_port) / 1000.0);
+    if (result.internal() == INFINITY) return result; // error checking
+    return result;
+}
+
 // Always returns 0 because the velocity setter is not dependent on hardware and should never fail
 int32_t Motor::setOutputVelocity(AngularVelocity outputVelocity) {
     std::lock_guard lock(m_mutex);
@@ -214,4 +221,50 @@ AngularVelocity Motor::getOutputVelocity() const {
     std::lock_guard lock(m_mutex);
     return m_outputVelocity;
 }
+
+AngularVelocity Motor::getMotorCartridge() const {
+    std::lock_guard lock(m_mutex);
+    const pros::motor_gearset_e_t mode = pros::c::motor_get_gearing(m_port);
+    switch (mode) {
+        case (pros::E_MOTOR_GEARSET_06): {
+            return 600_rpm;
+            break;
+        }
+        case (pros::E_MOTOR_GEARSET_18): {
+            return 200_rpm;
+            break;
+        }
+        case (pros::E_MOTOR_GEARSET_36): {
+            return 100_rpm;
+            break;
+        }
+        default: return from_rpm(INFINITY);
+    }
+}
+
+AngularVelocity Motor::getActualVelocity() const {
+    std::lock_guard lock(m_mutex);
+    const double v = pros::c::motor_get_actual_velocity(m_port);
+    if (v == PROS_ERR_F) return from_rpm(INFINITY);
+    const pros::motor_gearset_e_t mode = pros::c::motor_get_gearing(m_port);
+    AngularVelocity cartridgeSpeed = 0_rpm;
+    switch (mode) {
+        case (pros::E_MOTOR_GEARSET_06): {
+            cartridgeSpeed = 600_rpm;
+            break;
+        }
+        case (pros::E_MOTOR_GEARSET_18): {
+            cartridgeSpeed = 200_rpm;
+            break;
+        }
+        case (pros::E_MOTOR_GEARSET_36): {
+            cartridgeSpeed = 100_rpm;
+            break;
+        }
+        default: return from_rpm(INFINITY);
+    }
+
+    return from_rpm(v) * (m_outputVelocity / cartridgeSpeed);
+}
+
 } // namespace lemlib

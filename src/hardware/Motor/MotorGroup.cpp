@@ -167,6 +167,44 @@ std::vector<Temperature> MotorGroup::getTemperatures() const {
     return temperatures;
 }
 
+std::vector<Current> MotorGroup::getCurrents() const {
+    std::lock_guard lock(m_mutex);
+    std::vector<Motor> motors = getMotors();
+    std::vector<Current> currents;
+    for (const Motor motor : motors) { currents.push_back(motor.getCurrent()); }
+    return currents;
+}
+
+std::vector<AngularVelocity> MotorGroup::getMotorCartridges() const {
+    std::lock_guard lock(m_mutex);
+    std::vector<Motor> motors = getMotors();
+    std::vector<AngularVelocity> cartridges;
+    for (const Motor motor : motors) { cartridges.push_back(motor.getMotorCartridge()); }
+    return cartridges;
+}
+
+AngularVelocity MotorGroup::getActualVelocity() const {
+    std::lock_guard lock(m_mutex);
+    const std::vector<Motor> motors = getMotors();
+    // get the average angle of all motors in the group
+    AngularVelocity av = 0_rpm;
+    int errors = 0;
+    for (Motor motor : motors) {
+        // get angle
+        const AngularVelocity result = motor.getActualVelocity();
+        if (result == from_rpm(INFINITY)) {
+            errors++;
+            continue;
+        };
+        // add to sum
+        av += result;
+    }
+    // if no motors are connected, return INFINITY
+    if (errors == motors.size()) return from_rpm(INFINITY);
+    // otherwise, return the average angle
+    return av / (motors.size() - errors);
+}
+
 // Always returns 0 because the velocity setter is not dependent on hardware and should never fail
 int32_t MotorGroup::setOutputVelocity(AngularVelocity outputVelocity) {
     std::lock_guard lock(m_mutex);
