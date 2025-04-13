@@ -20,7 +20,7 @@ V5InertialSensor V5InertialSensor::from_pros_imu(pros::IMU imu, Number scalar) {
 
 SmartPort V5InertialSensor::getPort() const {
     std::lock_guard lock(m_mutex);
-    SmartPort port(m_imu.get_port(),DynamicPort{});
+    SmartPort port(m_imu.get_port(), DynamicPort {});
     return port;
 }
 
