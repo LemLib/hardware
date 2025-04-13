@@ -1,6 +1,7 @@
 #include "hardware/IMU/V5InertialSensor.hpp"
 #include "hardware/Port.hpp"
 #include "pros/imu.hpp"
+#include <cstdint>
 #include <mutex>
 
 namespace lemlib {
@@ -15,6 +16,12 @@ V5InertialSensor::V5InertialSensor(const V5InertialSensor& other)
 
 V5InertialSensor V5InertialSensor::from_pros_imu(pros::IMU imu, Number scalar) {
     return V5InertialSensor({imu.get_port(), runtime_check_port}, scalar);
+}
+
+SmartPort V5InertialSensor::getPort() const {
+    std::lock_guard lock(m_mutex);
+    SmartPort port(m_imu.get_port(),DynamicPort{});
+    return port;
 }
 
 int32_t V5InertialSensor::calibrate() {
