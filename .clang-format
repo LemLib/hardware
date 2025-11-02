@@ -1,85 +1,103 @@
 ---
-Language:        Cpp
-AccessModifierOffset: 0
-AlignAfterOpenBracket: Align
-AlignArrayOfStructures: None
-AlignConsecutiveAssignments: None
-AlignConsecutiveBitFields: None
-AlignConsecutiveDeclarations: None
-AlignConsecutiveMacros: None
-AlignEscapedNewlines: Right
-AlignOperands: Align
-AlignTrailingComments: false
+# inspired by rustfmt's default style
+# implemented for clang-format 19
+Language: Cpp
+Standard: Latest
+AccessModifierOffset: -2
+AlignAfterOpenBracket: BlockIndent
 AllowAllArgumentsOnNextLine: false
 AllowAllParametersOfDeclarationOnNextLine: false
-AllowShortBlocksOnASingleLine: Always
-AllowShortCaseLabelsOnASingleLine: true
-AllowShortEnumsOnASingleLine: true
-AllowShortFunctionsOnASingleLine: All
-AllowShortIfStatementsOnASingleLine: AllIfsAndElse
-AllowShortLambdasOnASingleLine: All
-AllowShortLoopsOnASingleLine: true
-AlwaysBreakAfterReturnType: None
-AlwaysBreakBeforeMultilineStrings: false
-AlwaysBreakTemplateDeclarations: No
-BinPackArguments: true
-BinPackParameters: true
+AlignConsecutiveAssignments: None
+AllowBreakBeforeNoexceptSpecifier: Always
+AllowShortBlocksOnASingleLine: Empty
+AllowShortCaseLabelsOnASingleLine: false
+AllowShortCompoundRequirementOnASingleLine: false
+AllowShortEnumsOnASingleLine: false
+AllowShortFunctionsOnASingleLine: Empty
+AllowShortIfStatementsOnASingleLine: Never
+AllowShortLambdasOnASingleLine: Empty
+AllowShortLoopsOnASingleLine: false
+AlwaysBreakAfterDefinitionReturnType: None
+AlwaysBreakBeforeMultilineStrings: true # auto formatting gets nasty otherwise
+BinPackArguments: false
+BinPackParameters: false
 BitFieldColonSpacing: Both
-BreakBeforeBraces: Custom
-BraceWrapping:
-  AfterCaseLabel: false
-  AfterClass: false
-  AfterControlStatement: Never
-  AfterEnum: false
-  AfterFunction: false
-  AfterNamespace: false
-  AfterObjCDeclaration: false
-  AfterStruct: false
-  AfterUnion: false
-  AfterExternBlock: false
-  BeforeCatch: false
-  BeforeElse: false
-  BeforeLambdaBody: false
-  BeforeWhile: false
-  IndentBraces: false
-  SplitEmptyFunction: true
-  SplitEmptyRecord: true
-  SplitEmptyNamespace: true
-BreakAfterJavaFieldAnnotations: false
-BreakBeforeBinaryOperators: None
+BreakAdjacentStringLiterals: true
+BreakAfterAttributes: Always
+BreakAfterReturnType: Automatic
+PenaltyReturnTypeOnItsOwnLine: 100 # we really don't want to ever do this
+BreakBeforeBinaryOperators: NonAssignment
+BreakBeforeBraces: Attach
+BreakBeforeConceptDeclarations: Always
+BreakBeforeInlineASMColon: Always
+BreakBeforeTernaryOperators: true
 BreakConstructorInitializers: BeforeColon
-BreakInheritanceList: BeforeColon
-BreakStringLiterals: true
-ColumnLimit: 120
+BreakInheritanceList: AfterColon
+BreakStringLiterals: true # this *could* produce really wacky results if autoformatting
+                          # we keep this to let the developer know that they've exceeded
+                          # the column limit. It can be manually formatted in a way that
+                          # won't trigger clang-format
+BreakTemplateDeclarations: Yes
+ColumnLimit: 100
 CompactNamespaces: false
-ConstructorInitializerIndentWidth: 4
 Cpp11BracedListStyle: true
 EmptyLineAfterAccessModifier: Never
-EmptyLineBeforeAccessModifier: Never
-IndentAccessModifiers: true
+EmptyLineBeforeAccessModifier: Always
+FixNamespaceComments: true
+IndentAccessModifiers: false
+IndentCaseBlocks: false
 IndentCaseLabels: true
-IndentExternBlock: AfterExternBlock
-IndentGotoLabels: true
+IndentExternBlock: NoIndent
+IndentGotoLabels: false
+IndentPPDirectives: BeforeHash
+IndentRequiresClause: true
 IndentWidth: 4
 IndentWrappedFunctionNames: false
-KeepEmptyLinesAtTheStartOfBlocks: false
+InsertBraces: false # can produce incorrect code if set to true
+InsertNewlineAtEOF: false
+InsertTrailingCommas: Wrapped
+KeepEmptyLines:
+  AtEndOfFile: false
+  AtStartOfBlock: false
+  AtStartOfFile: false
+LambdaBodyIndentation: OuterScope # can get really ugly otherwise
+MaxEmptyLinesToKeep: 1
+NamespaceIndentation: None
 PackConstructorInitializers: Never
-PointerAlignment: Left
-ReferenceAlignment: Left
+PointerAlignment: Left # its type info, so it goes on the left
+QualifierAlignment: Leave # can produce incorrect code if set to anything other than Leave
+ReferenceAlignment: Pointer
 ReflowComments: true
+RequiresClausePosition: OwnLine
+RequiresExpressionIndentation: OuterScope # can get really ugly otherwise
 SeparateDefinitionBlocks: Always
-SortIncludes: false
+ShortNamespaceLines: 0 # disable short namespaces essentially
+SortIncludes: true
+IncludeBlocks: Regroup
+IncludeCategories:
+  - Regex: '^"' # Group 1: Quote includes.
+    Priority: 1
+  - Regex: '^<' # Group 2: Angle-bracket includes.
+    Priority: 2
+SortUsingDeclarations: Lexicographic
+SpaceAfterCStyleCast: false
+SpaceAfterLogicalNot: false
+SpaceAfterTemplateKeyword: false
+SpaceAroundPointerQualifiers: Default
 SpaceBeforeAssignmentOperators: true
 SpaceBeforeCaseColon: false
-SpaceBeforeCpp11BracedList: true
+SpaceBeforeCpp11BracedList: false
 SpaceBeforeCtorInitializerColon: true
 SpaceBeforeInheritanceColon: true
-SpaceBeforeParens: ControlStatements
+SpaceBeforeParens: ControlStatementsExceptControlMacros
 SpaceBeforeRangeBasedForLoopColon: true
 SpaceBeforeSquareBrackets: false
 SpaceInEmptyBlock: false
-SpaceInEmptyParentheses: false
-SpacesInCStyleCastParentheses: false
-SpacesInConditionalStatement: false
-TabWidth: 4
+SpacesBeforeTrailingComments: 1
+SpacesInAngles: Never
+SpacesInLineCommentPrefix:
+  Minimum: 1
+  Maximum: 1
+SpacesInParens: Never
+SpacesInSquareBrackets: false
 UseTab: Never
