@@ -2,7 +2,6 @@
 
 #include "hardware/Encoder/Encoder.hpp"
 #include "hardware/Port.hpp"
-#include "pros/motors.hpp"
 #include "pros/rtos.hpp"
 #include "units/Temperature.hpp"
 
@@ -46,23 +45,6 @@ class Motor : public Encoder {
      * @param other the Motor to copy
      */
     Motor(const Motor& other);
-    /**
-     * @brief Create a new Motor object
-     *
-     * @param motor the pros motor object to get the port from
-     * @param outputVelocity the maximum theoretical velocity of the motor
-     *
-     * @b Example:
-     * @code {.cpp}
-     * void initialize() {
-     *     // create a pros motor on port 1, which is reversed
-     *     pros::Motor prosMotor(-1);
-     *     // create a motor which is reversed, on port 1, and spins at 200 rpm
-     *     lemlib::Motor motor = lemlib::Motor::from_pros_motor(prosMotor, 200_rpm);
-     * }
-     * @endcode
-     */
-    static Motor from_pros_motor(const pros::Motor motor, AngularVelocity outputVelocity);
     /**
      * @brief move the motor at a percent power from -1.0 to +1.0
      *
@@ -212,7 +194,7 @@ class Motor : public Encoder {
      * }
      * @endcode
      */
-    int32_t isConnected() const override;
+    int32_t isConnected() const;
     /**
      * @brief Get the relative angle measured by the motor
      *
