@@ -1,6 +1,16 @@
 [
   {
     "metadata": {
+      "location": "https://github.com/LemLib/hardware/releases/download/v0.5.0/hardware%400.5.0.zip"
+    },
+    "name": "hardware",
+    "py/object": "pros.conductor.templates.base_template.BaseTemplate",
+    "supported_kernels": "^4.2.2",
+    "target": "v5",
+    "version": "0.5.0"
+  },
+  {
+    "metadata": {
       "location": "https://github.com/LemLib/hardware/releases/download/v0.4.2/hardware%400.4.2.zip"
     },
     "name": "hardware",
