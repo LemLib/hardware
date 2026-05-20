@@ -47,6 +47,22 @@ class V5InertialSensor : public IMU {
          */
         static V5InertialSensor from_pros_imu(pros::Imu imu, Number scalar = 1.0);
         /**
+         * @brief Get the port the inertial sensor is connected to
+         *
+         * This function returns the port number of the inertial sensor.
+         *
+         * @return SmartPort the port the inertial sensor is connected to
+         *
+         * @b Example:
+         * @code {.cpp}
+         * void initialize() {
+         *     lemlib::V5InertialSensor imu(1);
+         *     std::cout << "Inertial sensor is connected to port " << imu.getPort() << std::endl;
+         * }
+         * @endcode
+         */
+        SmartPort getPort() const;
+        /**
          * @brief calibrate the V5 Inertial Sensor
          *
          * This function calibrates the IMU. Calibrating the IMU is needed before it can be used.
