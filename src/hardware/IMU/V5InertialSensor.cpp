@@ -42,7 +42,7 @@ int32_t V5InertialSensor::setRotation(Angle rotation) {
     Angle raw = this->getRotation();
     if (to_stRot(raw) == INFINITY) return INT32_MAX;
     else {
-        m_offset = rotation - raw;
+        m_offset = rotation - raw + m_offset;
         return 0;
     }
 }
