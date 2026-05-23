@@ -473,6 +473,32 @@ class Motor : public Encoder {
          */
         Temperature getTemperature() const;
         /**
+         * @brief Get the current of the motor
+         *
+         * This function uses the following values of errno when an error state is reached:
+         *
+         * ENODEV: the port cannot be configured as a motor
+         *
+         * @return Current the current of the motor
+         * @return INFINITY on failure, setting errno
+         *
+         * @b Example:
+         * @code {.cpp}
+         * void initialize() {
+         *     lemlib::Motor motor(1, 200_rpm);
+         *
+         *     // output motor current to the console
+         *     Current current = motor.getCurrent();
+         *     if (to_amp(current) == INFINITY) {
+         *         std::cout << "Error getting motor current" << std::endl;
+         *     } else {
+         *         std::cout << "Motor Current: " << to_amp(current) << std::endl;
+         *     }
+         * }
+         * @endcode
+         */
+        Current getCurrent() const;
+        /**
          * @brief set the output velocity of the motor
          *
          * @param outputVelocity the theoretical maximum output velocity of the motor, after gearing, to set
@@ -504,6 +530,38 @@ class Motor : public Encoder {
          * @endcode
          */
         AngularVelocity getOutputVelocity() const;
+        /**
+         * @brief Get the cartridge of the motor
+         *
+         * @return AngularVelocity
+         *
+         * @b Example:
+         * @code {.cpp}
+         * void initialize() {
+         *     lemlib::Motor motor(1, 360_rpm);
+         *     motor.move(.5);
+         *     // get the motor output
+         *     std::cout << motor.getMotorCartridge() << std::endl; // output: 600_rpm
+         * }
+         * @endcode
+         */
+        AngularVelocity getMotorCartridge() const;
+        /**
+         * @brief Get the current velocity of the motor
+         *
+         * @return AngularVelocity
+         *
+         * @b Example:
+         * @code {.cpp}
+         * void initialize() {
+         *     lemlib::Motor motor(1, 360_rpm);
+         *     motor.move(.5);
+         *     // get the motor output
+         *     std::cout << motor.getActualVelocity() << std::endl; // output: 180_rpm
+         * }
+         * @endcode
+         */
+        AngularVelocity getActualVelocity() const;
     private:
         mutable pros::Mutex m_mutex;
         AngularVelocity m_outputVelocity;
